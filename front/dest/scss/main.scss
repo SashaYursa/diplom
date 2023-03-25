@@ -1,0 +1,154 @@
+@import 'import.scss';
+
+//===============header==============
+@import '_main-header.scss';
+//===============end header==============
+
+//===============main====================
+.topics {
+  padding-top: 20px;
+}
+
+.topics__header {
+  margin-bottom: 20px;
+  color: #495057;
+  text-align: center;
+}
+
+.topics__filter {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+}
+
+.filter__link {
+}
+
+.filter__button {
+  padding: 5px 10px;
+  font-size: 16px;
+  font-weight: 700;
+  color: #495057;
+  cursor: pointer;
+  background: none;
+  border: 1px solid #495057;
+  border-radius: 10px;
+  transition: all ease .4s;
+
+  &.active {
+    color: #ffffff;
+    background-color: #49505781;
+    border: none;
+
+    &:hover {
+      border-radius: 10px;
+    }
+  }
+
+  &:hover {
+    color: #ffffff;
+    background-color: #49505781;
+    border-radius: 50px;
+  }
+}
+
+.topics__topic {
+  padding-top: 15px;
+}
+
+.topic__item {
+  display: flex;
+  flex-direction: row-reverse;
+  height: 200px;
+  padding: 18px 30px;
+  overflow: hidden;
+  background-color: #ffffff;
+  border: 1px solid #eaeaea;
+  border-radius: 12px;
+}
+
+.topic__image {
+  object-fit: cover;
+  border-radius: 12px;
+}
+
+.topic__text {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  justify-content: center;
+  padding-right: 10px;
+}
+
+.topic__header {
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.topic__description {
+  font-size: 18px;
+}
+
+.topic__attributes {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+}
+
+.topic__date {
+  font-size: 16px;
+}
+
+.topic__theme {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  background-color: #ffffff1b;
+}
+
+.topic__theme-name {
+  padding: 5px 10px;
+  font-family: Roboto;
+  font-size: 12px;
+  font-weight: 400;
+  text-transform: uppercase;
+  background-color: #3737375f;
+  border-radius: 8px;
+}
+
+.topic__link {
+  color: #000000;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  padding: 30px 0 60px;
+}
+
+.pagination a {
+  float: left;
+  padding: 8px 16px;
+  color: black;
+  text-decoration: none;
+}
+
+.pagination a.active {
+  color: #ffffff;
+  background-color: #9bb7d4;
+  border-radius: 5px;
+}
+
+.pagination a:hover:not(.active) {
+  background-color: #dddddd;
+  border-radius: 5px;
+}
+//================end maim===============
+
+//================footer=================
+@import '_main-footer.scss';
+//================end footer=================

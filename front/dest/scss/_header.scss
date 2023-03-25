@@ -1,0 +1,155 @@
+.header {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 100%;
+  color: #ffffff;
+  background: url("https://www.jotform.com/blog/wp-content/uploads/2010/03/photo-1524664399170-77e7118fdb6d.jpeg") no-repeat center center / 100% auto;
+  background-color: #ffffff;
+}
+
+.header-inner {
+  background-color: #0000005b;
+}
+
+.header__menu {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 0;
+  padding-right: 10px;
+  padding-left: 10px;
+}
+.logo-wrapper{
+  flex-grow: 1;
+}
+.menu__logo {
+  font-family: "Russo One";
+  font-size: 30px;
+  font-weight: 400;
+  color: #ffffff;
+  text-decoration: none;
+}
+
+.menu__items {
+  display: flex;
+  gap: 25px;
+}
+
+.menu__item {
+}
+
+.menu__link {
+  font-family: Roboto;
+  font-size: 20px;
+  color: #ffffff;
+  text-decoration: none;
+  text-transform: capitalize;
+}
+
+.vertical-line {
+  height: 20px;
+  border-left: 1px solid rgb(255 255 255);
+}
+
+.social__items {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  justify-content: center;
+}
+
+.social-link {
+  display: flex;
+  flex-direction: row;
+}
+
+.social__image {
+  height: 20px;
+}
+
+//search-bar
+.menu__search-bar {
+  display: flex;
+  align-items: center;
+}
+
+.menu__search-form {
+  border: none;
+  border-radius: 12px;
+}
+
+.menu__search-input {
+  height: 25px;
+  padding-left: 10px;
+  font-size: 18px;
+  background: #00000000;
+  border: 1px solid #ffffff;
+  border-radius: 12px;
+  transition: all ease .3s;
+}
+
+.menu__search-input:focus {
+  background-color: #dddddd;
+}
+
+.menu__search-submit {
+  width: 30px;
+  height: 30px;
+  background: url("../images/search-light.png")  no-repeat;
+  background-position: -10%;
+  background-size: 30px;
+  border: none;
+  border-radius: 12px;
+  transition: all ease .3s;
+}
+
+.menu__search-submit:hover {
+  background-color: #ffffff8e;
+}
+
+.menu__search-submit:active {
+  background-size: 35px;
+}
+//end search-bar
+.header__content {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: flex-start;
+  justify-content: center;
+  max-width: 60%;
+  padding-bottom: 5%;
+  padding-left: 50px;
+}
+
+.theme {
+  display: flex;
+  gap: 10px;
+}
+
+.theme__name {
+  padding: 5px 10px;
+  font-family: Roboto;
+  font-size: 12px;
+  font-weight: 400;
+  text-transform: uppercase;
+  background-color: #ffffff5f;
+  border-radius: 8px;
+}
+
+.text-header {
+  font-size: 36px;
+  font-weight: 700;
+}
+
+.content__description {
+  font-size: 18px;
+  font-weight: 400;
+}
+
+.content__date {
+  font-size: 18px;
+  font-weight: 400;
+}
