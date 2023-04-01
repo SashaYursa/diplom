@@ -7,7 +7,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <link href="" rel="icon">
+    <link href="../dest/images/favico.png" rel="icon">
 
     <meta name="keywords" content="...">
     <meta name="description" content="desc">
@@ -31,16 +31,31 @@
     </header>
     <!--Header-->
     <main class="main">
+
       <div class="container">
-        <section class="user-information">
-          <span class="user-information__name" id="name"></span>
-          <span class="user-information__email" id="email"></span>
-          <span class="user-information__created-at" id="created-at"></span>
-        </section>
-        <section class="buttons">
-          <a href="add-work/" class="create-work-link"><button class="create-work-button">Створити роботу</button></a>
-          <button class="logout-button">Вийти</button>
-        </section>
+        <div class="user__content">
+          <section class="user-information">
+            <div class="user-information__img">
+              <img src="../dest/images/default-background.webp" alt="user-image">
+            </div>
+            <span class="user-information__name" id="name"></span>
+            <span class="user-information__email" id="email"></span>
+            <span class="user-information__created-at" id="created-at"></span>
+          </section>
+
+          <section class="user-works">
+            <div class="works__choice">
+              <button class="create-work-button active">
+                Роботи
+              </button>
+              <button class="create-work-button">
+                Пости
+              </button>
+            </div>
+            <div class="portfolio__items">
+            </div>
+          </section>
+        </div>
       </div>
     </main>
 
@@ -49,7 +64,6 @@
     <script src="../dest/js/loadParts.js"></script>
     <script src="../dest/js/app.js"></script>
     <script src="../dest/js/user.js"></script>
-    <script src="../dest/js/portfolioCreate.js"></script>
   </body>
 
 </html>

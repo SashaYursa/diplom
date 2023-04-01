@@ -8,15 +8,18 @@
 
 .footer__items {
   display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
   justify-content: space-evenly;
+  padding: 0 10px;
 }
 
 .footer__page-links {
-  >ul{
-    margin-top: 10px;
+  >ul {
     display: flex;
     flex-direction: column;
     gap: 10px;
+    margin-top: 10px;
   }
 }
 
@@ -86,4 +89,10 @@
   font-weight: 400;
   color: #ffffff;
   text-align: center;
+}
+
+@media (max-width: 458px) {
+  .footer__page-links {
+    margin-bottom: 20px;
+  }
 }

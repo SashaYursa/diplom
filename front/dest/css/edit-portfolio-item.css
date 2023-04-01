@@ -1,0 +1,126 @@
+@import url("https://fonts.googleapis.com/css2?family=Lora:wght@400;700&family=Roboto:wght@400;700&family=Russo+One&display=swap");
+body {
+  width: 100%;
+  min-height: 100vh;
+  margin: 0;
+  font-family: Lora;
+  font-size: 12px;
+  background-color: #f5f5f5;
+}
+
+.container {
+  max-width: 1300px;
+  margin: auto;
+}
+
+.container {
+  align-items: center;
+  max-width: 1000px;
+  margin: 20px auto 0;
+  background-color: #ffffff;
+}
+
+.work__form {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  width: 100%;
+}
+
+.work__lable {
+  font-size: 25px;
+}
+
+.work__name {
+  padding: 10px;
+  font-size: 40px;
+}
+
+.work-input {
+  font-family: Lora;
+  word-wrap: break-word;
+  border: none;
+}
+
+.work-input:focus,
+.work-input:active {
+  outline: none;
+}
+
+.work__description {
+  min-height: 300px;
+  padding: 10px;
+  font-size: 25px;
+  resize: none;
+  overflow: auto;
+}
+
+.work__image {
+  align-items: center;
+  width: 90%;
+  padding: 5% 0;
+  margin: 10px auto;
+  font-size: 18px;
+  color: #555555;
+  text-align: center;
+  background: #eeeeee;
+  border: 5px dashed #cccccc;
+  border-radius: 5px;
+  border-radius: 5px;
+  transition: all 0.3s ease 0s;
+}
+
+.work__image.active {
+  color: #111a87;
+  border: 5px solid;
+}
+
+.image__field {
+  opacity: 0;
+}
+
+.image__field.active {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: space-evenly;
+  padding: 10px;
+  margin: 10px;
+  overflow: hidden;
+  border: 1px solid #000000;
+  border-radius: 6px;
+  opacity: 1;
+}
+
+.selected-image {
+  object-fit: cover;
+  height: 300px;
+  border-radius: 6px;
+  width: 100%;
+}
+.selected-image.logo {
+  border: 2px solid #03f924;
+  padding: 2px;
+  height: 295px;
+  width: 98%;
+}
+
+.delete-image {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 30px;
+  height: 30px;
+  border: none;
+  background-color: rgba(238, 238, 238, 0);
+  background-image: url(../images/remove.png);
+  background-size: 100%;
+  background-repeat: no-repeat;
+  cursor: pointer;
+}
+
+.image-container {
+  width: 49%;
+  overflow: hidden;
+  position: relative;
+}

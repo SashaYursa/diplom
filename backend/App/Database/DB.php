@@ -75,9 +75,10 @@ class DB
     }
 
     //Видалення запису з таблиці
-    public function deleteFromTable($table, $id): array
+    public function deleteFromTable($table, $param, $val): array
     {
-        $sql = "DELETE FROM `${table}` WHERE `${table}`.`id` = ${id}";
+        $sql = "DELETE FROM `${table}` WHERE `${table}`.`${param}` = '${val}'";
+
         try {
             $this->execute($sql);
             return ['ok' => "Запис в таблиці видалено"];
@@ -184,5 +185,50 @@ class DB
             return ['error' => "Таблиці не існує"];
         }
         return $result;
+    }
+
+    //Методи для користувача при роботі з портфоліо в меню користувача
+    //Отримання роботи користувача
+    public function getUserPortfolioItems($table, $user, $limit, $offset)
+    {
+        $sql = "SELECT * FROM `$table` WHERE `author_id` = ${user} ORDER BY `id` DESC LIMIT ${limit} OFFSET ${offset}";
+        $result = $this->query($sql);
+        return $result;
+    }
+
+    //Отримання роботи по id користувача для перевірки того що це саме його робота
+    public function checkUserHasPortfolioItem($userID, $itemID)
+    {
+        $sql = "SELECT * FROM `portfolio` WHERE `author_id` = ${userID} AND `id` = ${itemID}";
+        $res = $this->query($sql);
+        return $res;
+    }
+
+    public function getAllImagesForPortfolio($portfolioID)
+    {
+        $sql = "SELECT `image_name` FROM `images_for_portfolio` WHERE `portfolio_id` = ${portfolioID}";
+        return $this->query($sql);
+    }
+
+    public function setNewPortfolioLogo($logoName, $newName)
+    {
+        $sql = "UPDATE `portfolio` SET `portfolio_logo` = '${newName}' WHERE `portfolio`.`portfolio_logo` = '${logoName}'";
+        try {
+            $this->execute($sql);
+            return ['ok' => "Запис в таблиці видалено"];
+        } catch (Exception) {
+            return ['error' => "Запис не видалено"];
+        }
+    }
+
+    public function movePortfolioLogoToPortflioItem($newName, $oldName)
+    {
+        $sql = "UPDATE `images_for_portfolio` SET `image_name` = '${newName}' WHERE `images_for_portfolio`.`image_name` = '${oldName}'";
+        try {
+            $this->execute($sql);
+            return ['ok' => "Запис в таблиці видалено"];
+        } catch (Exception) {
+            return ['error' => "Запис не видалено"];
+        }
     }
 }

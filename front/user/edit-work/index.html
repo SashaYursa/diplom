@@ -2,7 +2,7 @@
 <html lang="uk">
 
   <head>
-    <title>Додання роботи</title>
+    <title>Редагування роботи</title>
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -22,7 +22,7 @@
     <meta property="og:description" content="desc">
 
     <link href="../../dest/mincss/reset.min.css" rel="stylesheet">
-    <link href="../../dest/mincss/add-portfolio-item.min.css" rel="stylesheet">
+    <link href="../../dest/mincss/edit-portfolio-item.min.css" rel="stylesheet">
   </head>
 
   <body class="body">
@@ -33,7 +33,8 @@
         <form class="work__form" enctype="multipart/form-data">
           <input class="work__name work-input" id="work-name" name="work-name" type="text" placeholder="Назва роботи">
           <textarea class="work__description work-input" id="work-description" name="work-description"
-            placeholder="Опис роботи"></textarea>
+            placeholder="Опис роботи">
+          </textarea>
           <label class="work__lable" for="logo">Картинки</label>
           <input class="file__button" id="logo" type="file" hidden>
           <div class="work__image" id="dropZone">
@@ -45,7 +46,7 @@
         </form>
       </div>
     </main>
-    <script src="../../dest/js/portfolioCreate.js"></script>
+    <script src="../../dest/js/portfolioEdit.js"></script>
   </body>
 
 </html>

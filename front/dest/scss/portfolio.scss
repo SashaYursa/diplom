@@ -40,10 +40,7 @@ main{
   background-repeat: no-repeat;
 
 }
-.portfolio {
-}
-.container {
-}
+
 .portfolio__items {
   padding: 0 10px;
   display: grid;
@@ -191,24 +188,53 @@ main{
   padding: 30px 0 60px;
 }
 
-.pagination a {
+.pagination__item {
   float: left;
   padding: 8px 16px;
   color: black;
   text-decoration: none;
+  cursor: pointer;
 }
 
-.pagination a.active {
+.pagination__item.active {
   color: #ffffff;
   background-color: #9bb7d4;
   border-radius: 5px;
 }
 
-.pagination a:hover:not(.active) {
+.pagination__item:hover:not(.active) {
   background-color: #dddddd;
   border-radius: 5px;
 }
+
+
+
+
 //======pagination end=========
+
+@media (max-width: 910px){
+  .portfolio__items{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+  }
+  .portfolio__item{
+    position: relative;
+    overflow: hidden;
+    height: 300px;
+    width: 300px;
+  }
+}
+@media (max-width: 630px){
+  .portfolio__item{
+    width: 100%;
+  }
+}
+
+
+
 //========main end========
 
 //=========footer==============

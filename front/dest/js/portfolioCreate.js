@@ -94,7 +94,6 @@ file.addEventListener('change', (e) => {
 });
 
 function fileHandler(file) {
-  console.log('as');
   dragAndDrop.classList.remove('active');
   if (file != null || file != undefined) {
     let url = URL.createObjectURL(file);

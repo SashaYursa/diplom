@@ -30,7 +30,7 @@ class Art
         }
         $logo = $this->getImage($res['portfolio_logo'], 'portfolio/logo');
         if (!$logo['status']) {
-            return $logo;
+            return ['logo' => $logo, 'res' => $res];
         }
         $res['path'] = $logo['path'];
         $res['extention'] = $logo['extention'];
@@ -40,9 +40,12 @@ class Art
     public function getImagesForPortfolio($id, $offset, $limit)
     {
         $res = $this->db->getImageForPortfolio('images_for_portfolio', $id, $offset, $limit);
-        if (isset($res['error'])) {
-            return $res;
-        }
+        return $res;
+    }
+
+    public function getAllImagesForPortfolio($id)
+    {
+        $res = $this->db->getAllImagesForPortfolio($id);
         return $res;
     }
 
@@ -129,7 +132,8 @@ class Art
 
     private function saveImage($file, $dir): array
     {
-        $fileName = time() . $file['name'];
+        $salt = rand(0, 100);
+        $fileName = time() . $salt . $file['name'];
         $tmpName = $file['tmp_name'];
         if (!is_dir($dir)) {
             mkdir($dir);
@@ -141,7 +145,22 @@ class Art
         }
     }
 
-    public function editArt($name, $password, $email)
+    public function getUserArts($user, $limit, $offset)
+    {
+        $res = $this->db->getUserPortfolioItems($this->tableName, $user, $limit, $offset);
+        return $res;
+    }
+
+    public function checkUserCanEditArt($userID, $artID)
+    {
+        $res = $this->db->checkUserHasPortfolioItem($userID, $artID);
+        if (empty($res)) {
+            return false;
+        }
+        return $res;
+    }
+
+    public function editArt($param, $val, $id)
     {
         return $this->db->updateItemInTable($this->tableName, $param, $val, $id);
     }
@@ -156,8 +175,58 @@ class Art
         $res['logo'] = $logo['file'];
     }
 
-    public function deleteArt($id)
+    private function deleteImage($from, $name)
     {
-        return $this->db->deleteFromTable($this->tableName, $id);
+        $path = 'portfolio' . '/' . $from . '/' . $name;
+        if (!unlink($path)) {
+            return ['error' => 'Файл не видалено'];
+        }
+        return ['ok' => 'Файл видалено'];
+    }
+
+    public function deleteArt($name, $location)
+    {
+        $res = [];
+        if ($location === 'logo') {
+            $res['fromDB'] = $this->db->updatePortfolioLogo($name, 'empty');
+        }
+        if ($location === 'images') {
+            $res['fromDB'] = $this->db->deleteFromTable('images_for_portfolio', 'image_name', $name);
+        }
+        $res['fromImage'] = $this->deleteImage($location, $name);
+        return $res;
+    }
+
+    public function deletePortfolioItem($id)
+    {
+        $images = $this->db->getAllImagesForPortfolio($id);
+        $logo = $this->db->getFromTable($this->tableName, 'id', $id);
+        $res = $this->db->deleteFromTable($this->tableName, 'id', $id);
+        foreach ($images as $image) {
+            unlink('portfolio/images/' . $image['image_name']);
+        }
+        unlink('portfolio/logo/' . $logo['portfolio_logo']);
+        return ['status' => true];
+    }
+
+    public function setNewLogo($oldLogo, $newLogo)
+    {
+        try {
+            $rename1 = rename('portfolio/logo/' . $oldLogo, 'portfolio/images/' . $oldLogo);
+            $rename2 = rename('portfolio/images/' . $newLogo, 'portfolio/logo/' . $newLogo);
+            if ($rename1 && $rename2) {
+            } else {
+                throw new \Exception('Не переміщено файлии');
+            }
+        } catch (\Exception $e) {
+            return [false => $e];
+        }
+        $res = $this->db->setNewPortfolioLogo($oldLogo, $newLogo);
+        $res2 = $this->db->movePortfolioLogoToPortflioItem($oldLogo, $newLogo);
+        if (isset($res['ok']) && isset($res2['ok'])) {
+            return [true => 'Логотип успішно змінено'];
+        } else {
+            return [false => 'Логотип не змінено'];
+        }
     }
 }

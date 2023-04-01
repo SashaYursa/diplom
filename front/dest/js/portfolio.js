@@ -1,21 +1,6 @@
-const portfolioLink = 'http://artist-blog.ua/backend/arts';
-let data;
-
-const urlParams = new URLSearchParams(window.location.search);
-const myParam = urlParams.get('page') || 1;
-const ItemsInPage = 15;
-const itemsCount = ItemsInPage * (myParam - 1);
-const offset = itemsCount + ItemsInPage;
-
-
-let pageCount;
-let itemCount;
-
-
-getCountPages(ItemsInPage);
+// Перевірка користувача
 window.onload = function () {
   let userField = document.getElementById('login');
-
   const userToken = sessionStorage.getItem('user_token') || localStorage.getItem('user_token') || 0;
   if (userToken !== 0) {
     getUser(link, userToken, userField);
@@ -24,46 +9,101 @@ window.onload = function () {
   else {
     userField.innerHTML = 'Увійти';
   }
-
 }
 
-function getCountPages(items) {
+
+const portfolioLink = 'http://artist-blog.ua/backend/arts';
+let data;
+
+const urlParams = new URLSearchParams(window.location.search);
+let myParam = urlParams.get('page') || 1;
+const ItemsInPage = 15;
+let itemsCount = ItemsInPage * (myParam - 1);
+let offset = itemsCount + ItemsInPage;
+
+let pageCount;
+let itemCount;
+
+loadData();
+
+
+async function loadData() {
+  await getCountPages(ItemsInPage);
+  await loadImages(itemsCount, offset);
+  addPopups();
+
+  displayPagination();
+}
+
+async function getCountPages(items) {
   let newLink = portfolioLink + '?itemsInPage=' + items;
-  fetch(newLink, {
+  let response = await fetch(newLink, {
     method: 'GET',
     headers: {
       "Content-type": "application/json;",
       "status": "get-count-pages",
     }
-  })
-    .then(res => res.json())
-    .then(data => {
-      pageCount = data['pages'];
-      itemCount = data['items'];
-
-      loadImages(itemsCount, offset);
-    })
-    .then(() => {
-      addPopups();
-    })
-    .catch(exeption => {
-      console.log(exeption);
-    })
+  });
+  const responseData = await response.json();
+  pageCount = responseData.pages;
+  itemCount = responseData.items;
 }
 
-function loadImages(count, offset) {
 
-  const portfolioItems = document.querySelector('.portfolio__items');
-  portfolioItems.innerHTML = '';
-  for (let i = count; i < offset; i++) {
-    if (i >= itemCount) {
-      console.log('break');
-      break;
-    }
-    createElement(i, portfolioItems);
-    addImage(i)
-    addImageInfo(i);
+
+async function displayPagination() {
+  const paginationElement = document.querySelector('.pagination');
+  paginationElement.innerHTML = '';
+  const startElement = document.createElement("a");
+
+  startElement.classList.add('pagination__item');
+  startElement.innerText = '«';
+  paginationElement.appendChild(startElement);
+  startElement.addEventListener('click', (e) => {
+    e.preventDefault();
+    myParam = 1;
+    itemsCount = ItemsInPage * (myParam - 1);
+    offset = itemsCount + ItemsInPage;
+    loadData();
+    window.scrollTo(0, 0)
+  });
+
+  for (let i = 0; i < pageCount; i++) {
+    let paginationItem = createPaginationItem(i + 1);
+    paginationElement.appendChild(paginationItem);
+    paginationItem.addEventListener('click', (e) => {
+      e.preventDefault();
+
+      myParam = paginationItem.innerText;
+      itemsCount = ItemsInPage * (myParam - 1);
+      offset = itemsCount + ItemsInPage;
+      loadData();
+      window.scrollTo(0, 0)
+    });
   }
+
+  const endElement = document.createElement("a");
+  endElement.classList.add('pagination__item');
+  endElement.innerText = '»';
+  paginationElement.appendChild(endElement);
+  endElement.addEventListener('click', (e) => {
+    e.preventDefault();
+    myParam = pageCount;
+    itemsCount = ItemsInPage * (myParam - 1);
+    offset = itemsCount + ItemsInPage;
+    loadData();
+    window.scrollTo(0, 0)
+  });
+}
+
+function createPaginationItem(page) {
+  const paginationElement = document.createElement("a");
+  paginationElement.classList.add('pagination__item');
+  paginationElement.innerText = page;
+  if (paginationElement.innerText == myParam) {
+    paginationElement.classList.add('active');
+  }
+  return paginationElement;
 }
 
 function createElement(id, portfolioItems) {
@@ -78,48 +118,78 @@ function createElement(id, portfolioItems) {
   `;
 }
 
-function addImageInfo(item) {
+async function addImageInfo(item) {
   let newLink = portfolioLink + '?item=' + item;
-  fetch(newLink, {
+  let response = await fetch(newLink, {
     method: 'GET',
     headers: {
       "Content-type": "application/json;",
       "status": "get-info",
     }
-  })
-    .then(res => res.json())
-    .then(data => {
-      const imageItem = document.getElementById('desc' + (item + 1));
-      const imageItemID = document.getElementById('itemID' + (item + 1));
-      imageItem.innerText = data['name'];
-      imageItemID.innerText = data['id'];
-    });
-}
+  });
+  if (response.ok) {
+    let data = await response.json();
+    const imageItem = document.getElementById('desc' + (item + 1));
+    const imageItemID = document.getElementById('itemID' + (item + 1));
+    imageItem.innerText = data['name'];
+    imageItemID.innerText = data['id'];
+    if (data['res'] != undefined) {
+      imageItem.innerText = data['res']['name'];
+      imageItemID.innerText = data['res']['id'];
+    }
+    return data;
+  }
+  return false;
 
-function addImage(item) {
-  let newLink = portfolioLink + '?item=' + item;
-  fetch(newLink, {
-    method: 'GET',
-    headers: {
-      "Content-type": "application/json;",
-      "status": "get-image"
-    },
-  }).then(response => {
-    return response.blob()
-  })
-    .then(data => {
+}
+async function loadImages(count, offset) {
+
+  const portfolioItems = document.querySelector('.portfolio__items');
+  portfolioItems.innerHTML = '';
+  for (let i = count; i < offset; i++) {
+    if (i >= itemCount) {
+      break;
+    }
+    createElement(i, portfolioItems);
+    let data = await addImageInfo(i);
+
+    if (data['res'] != undefined) {
+      console.log('bad reques');
+      await addImage(i, false);
+    } else {
+      await addImage(i)
+    }
+
+  }
+}
+async function addImage(item, data = true) {
+  if (!data) {
+    const imageItem = document.getElementById(item + 1);
+    imageItem.src = '../dest/images/default-background.webp';
+  }
+  else {
+
+
+    let newLink = portfolioLink + '?item=' + item;
+    let response = await fetch(newLink, {
+      method: 'GET',
+      headers: {
+        "Content-type": "application/json;",
+        "status": "get-image"
+      },
+    });
+    if (response.ok) {
+      let data = await response.blob()
       let url = URL.createObjectURL(data);
-      return url;
-    })
-    .then(image => {
       const imageItem = document.getElementById(item + 1);
-      imageItem.src = image;
-    })
-    .catch(exeption => {
-      console.log(exeption);
-    });
+      imageItem.src = url;
+    }
+    else {
+      console.log('bad');
+    }
+  }
 }
-
+/////////////////////////////////////////////////////////////////
 //popup
 
 const body = document.querySelector('body');
@@ -215,149 +285,110 @@ function bodyUnlock() {
 
 //popup вивід інформації
 
+async function popupSetInforamation(currentPopup, itemID) {
 
-function popupSetInforamation(popup, itemID) {
+  let popupInfo = await getInfoForPopup(itemID);
+  currentPopup.innerHTML = `
+  <div class="popup__body">
+    <a href="##" class="popup__area"></a>
+    <div class="popup__content">
+      <a href="##" class="popup__close close-popup">x</a>
+      <div class="popup__title"></div>
+      <img class="popup__image" src="" alt="main-img">
+      <div class="popup__text"></div>
+    </div>
+  </div>
+  `;
+  setPopupInfo(popupInfo, currentPopup);
+  let logoImg = new Image();
+  let popupLogo = await popupLoadLogo(itemID);
+  if (popupLogo['status'] === false) {
+    logoImg.src = '../dest/images/default-background.webp';
+  } else {
+    logoImg.src = URL.createObjectURL(popupLogo);
+  }
+  await logoImg.decode();
+  const popupContent = document.querySelector('.popup__content');
+  const popupImage = document.querySelector('.popup__image');
+  popupImage.src = logoImg.src;
+  formattedImages(popupContent, popupImage);
+
+  for (let index = 0; index < popupInfo.countImages; index++) {
+
+    let popupImage = await popupLoadImages(itemID, index);
+    let img = new Image();
+    img.src = URL.createObjectURL(popupImage);
+    await img.decode();
+    popupContent.innerHTML += `<img class="popup__image" id="image${index + 1}" src="${img.src}" alt="main-img">`;
+    let popupImageItem = document.getElementById('image' + (index + 1));
+    formattedImages(popupContent, popupImageItem);
+  }
+}
+
+async function getInfoForPopup(itemID) {
   let newLink = portfolioLink + '?id=' + itemID;
-  fetch(newLink, {
+  let response = await fetch(newLink, {
     method: 'GET',
     headers: {
       "Content-type": "application/json;",
       "status": "get-info"
     },
   })
-    .then(response => response.json())
-    .then(data => {
-      popup.innerHTML = `
-        <div class="popup__body">
-          <a href="##" class="popup__area"></a>
-          <div class="popup__content">
-            <a href="##" class="popup__close close-popup">x</a>
-            <div class="popup__title"></div>
-            <img class="popup__image" src="" alt="main-img">
-            <div class="popup__text"></div>
-          </div>
-        </div>
-        `;
-      return data;
-    }).then(data => {
-      setPopupInfo(data, popup);
-      return data;
-
-    })
-    .then(data => {
-      popupLoadLogo(popup, newLink);
-      return data;
-    })
-    .then(data => {
-      popupLoadImages(popup, newLink, data['countImages']);
-    })
-    .catch(exeption => console.log(exeption));
+  return await response.json();
 }
 
-function setPopupInfo(data, popup) {
+async function setPopupInfo(data, popup) {
   const popupHeader = popup.querySelector('.popup__title');
   const popupText = popup.querySelector('.popup__text');
   popupHeader.innerText = data['name'];
   popupText.innerText = data['description'];
 }
 
-async function popupLoadLogo(popup, link) {
-  await fetch(link, {
+async function popupLoadLogo(itemID) {
+  let newLink = portfolioLink + '?id=' + itemID;
+  let response = await fetch(newLink, {
     method: 'GET',
     headers: {
-      "Content-type": "application/json;",
       "status": "get-image"
     },
-  }).then(response => {
-    return response.blob();
   })
-    .then(data => {
-      // console.log(data, 'data');
-      let url = URL.createObjectURL(data);
-      return url;
-    })
-    .then(image => {
-      let popupContent = document.querySelector('.popup__content');
-      const popupImage = document.querySelector('.popup__image');
-      popupImage.src = image;
-      popupImage.onload = () => {
-        console.log(popupContent);
-        formattedImages(popupContent, popupImage, 'logo ');
-      }
 
-    })
-    .catch(exeption => {
-      console.log(exeption);
-    });
-}
-
-async function popupLoadImages(popup, link, imageCount) {
-
-  for (let index = 0; index < imageCount; index++) {
-    let newLink = link + '&offset=' + index;
-    await fetch(newLink, {
-      method: 'GET',
-      headers: {
-        "Content-type": "application/json;",
-        "status": "get-image-for-portfolio"
-      },
-    }).then(response => {
-      return response.blob()
-    })
-      .then(data => {
-        let url = URL.createObjectURL(data);
-        return url;
-      })
-      .then(image => {
-        const popupContent = document.querySelector('.popup__content');
-        popupContent.innerHTML += `<img class="popup__image" id="image${index + 1}" src="" alt="main-img">`;
-        let popupImageItem = document.getElementById('image' + (index + 1));
-        popupImageItem.src = image;
-        popupImageItem.onload = () => {
-          formattedImages(popupContent, popupImageItem, 'images');
-        }
-      })
-      .catch(exeption => {
-        console.log(exeption);
-      });
+  let responseHeaders = response.headers;
+  let responseMethod = 'blob';
+  responseHeaders.forEach(element => {
+    if (element === 'json/application') {
+      responseMethod = 'json';
+    }
+  });
+  if (responseMethod === 'json') {
+    return await response.json();
   }
+  else {
+    return await response.blob();
+  }
+
 }
 
-async function formattedImages(popupContent, popupItem, from) {
+async function popupLoadImages(itemID, index) {
+  let newLink = portfolioLink + '?id=' + itemID + '&offset=' + index;
+  let response = await fetch(newLink, {
+    method: 'GET',
+    headers: {
+      "status": "get-image-for-portfolio"
+    },
+  });
+  return await response.blob();
+}
+
+function formattedImages(popupContent, popupItem) {
   let itemWidth = parseInt(getComputedStyle(popupItem).width);
   let containerWidth = parseInt(getComputedStyle(popupContent).width);
-
-  if (isNaN(itemWidth)) {
-    itemWidth = containerWidth + 100;
-  }
   if (itemWidth < containerWidth - 200) {
     popupItem.style.width = (containerWidth - 200) + 'px';
   }
   else {
     popupItem.style.width = containerWidth + 'px';
   }
-
 }
 
 //pagination
-
-const prevPageButton = document.getElementById('prev');
-const nextPageButton = document.getElementById('next');
-
-prevPageButton.addEventListener('click', () => {
-
-});
-
-nextPageButton.addEventListener('click', () => {
-  let currentLocation = window.location.search.replace('?', '').split('&');
-  let params = [];
-  currentLocation.forEach(param => {
-    let item = param.split('=');
-    params[item[0]] = item[1];
-  });
-  params['page']++;
-  let clearLocation = location.protocol + '//' + location.host + location.pathname;
-  let link = clearLocation += '?page' + (params['page']);
-  window.location.href = link;
-
-});
