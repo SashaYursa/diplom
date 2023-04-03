@@ -24,7 +24,9 @@ async function loadPortfolioItem(itemID, userToken) {
     },
     body: requestData,
   });
-  return await response.json();
+  let data = await response.json();
+  console.log(data);
+  return data;
 }
 
 async function outPortfolioItem(data) {
@@ -194,7 +196,9 @@ async function createSendEvent(data) {
       body: data
     });
     let responseData = await response.json();
-    console.log(responseData);
+    if (responseData.res !== undefined) {
+      window.location.href = '../';
+    }
   });
 }
 
@@ -289,7 +293,9 @@ async function main(itemID) {
     return 0;
   }
   portfolioItem = await loadPortfolioItem(itemID, userToken);
-  console.log(portfolioItem);
+  if (portfolioItem.portfolioItem !== undefined) {
+    window.location.href = '../404/';
+  }
   await outPortfolioItem(portfolioItem);
   await createSendEvent(portfolioItem);
   await createImageEvent(imageField, portfolioItem);

@@ -17,6 +17,7 @@
 
 .work__lable {
   font-size: 25px;
+  padding-left: 20px;
 }
 
 .work__name {
@@ -90,4 +91,19 @@
 }
 
 .work-button {
+}
+
+.work__image-errors {
+margin: 10px 0 10px 20px;
+}
+.work__image-error {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  list-style: none;
+}
+.error-text {
+  font-size: 18px;
+  color: red;
+  font-style: italic;
 }

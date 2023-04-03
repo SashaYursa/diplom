@@ -84,7 +84,6 @@ async function loadPortfolioImages(image) {
 }
 async function addPortfolioItems(items, itemsBody) {
   for (let i = 0; i < items.length; i++) {
-    console.log(items[i]);
     let image;
     if (items[i]['portfolio_logo'] === 'empty') {
       image = '../dest/images/default-background.webp';
@@ -111,8 +110,8 @@ async function addPortfolioItems(items, itemsBody) {
   }
 }
 
-async function deletePortfolioItem(id) {
-  console.log(id);
+async function deletePortfolioItem(id, button) {
+  let element = button.parentElement.parentElement.parentElement;
   const deleteLink = portfolioLink + '?id=' + id;
   const formData = new FormData();
   formData.append('id', id);
@@ -121,7 +120,11 @@ async function deletePortfolioItem(id) {
     method: 'DELETE',
     body: formData
   });
-  return response.json();
+  let res = await response.json();
+  if (res.status) {
+    let elementBody = document.querySelector('.portfolio__items');
+    elementBody.removeChild(element);
+  }
 }
 
 async function updatePortfolioItem(id) {
@@ -152,8 +155,7 @@ async function main(userToken) {
     button.addEventListener('click', async (e) => {
       e.preventDefault();
       let id = button.id.split('-')[1];
-      let deleted = await deletePortfolioItem(id);
-      console.log(deleted);
+      await deletePortfolioItem(id, button);
     });
   });
   editButtons.forEach(button => {
