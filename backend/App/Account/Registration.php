@@ -30,7 +30,7 @@ class Registration
         }
     }
 
-    private function hashUserPassword()
+    public function hashUserPassword()
     {
         $options = [
             'cost' => 12,

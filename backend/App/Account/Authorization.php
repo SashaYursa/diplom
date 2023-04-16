@@ -27,10 +27,12 @@ class Authorization
         return true;
     }
 
-    private function checkUserPassword($correctPassword)
+    public function checkUserPassword($correctPassword)
     {
         if (password_verify($this->userPassword, $correctPassword)) {
             return true;
+        } else {
+            return false;
         }
     }
 

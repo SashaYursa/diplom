@@ -175,8 +175,40 @@ class Art
         $res['logo'] = $logo['file'];
     }
 
-    private function deleteImage($from, $name)
+    public function getArtForEdit($id, $user)
     {
+        $res = $this->getArtByID($id);
+        $createdBy = $user->getUser('id', strval($res['author_id']));
+        $images = $this->getAllImagesForPortfolio($_GET['id']);
+        $res['user'] = [
+            'login' => $createdBy['login'],
+            'is_admin' => $createdBy['is_admin'],
+            'image' => $createdBy['user_image'],
+            'email' => $createdBy['email'],
+        ];
+        $res['images'] = $images;
+        return $res;
+    }
+
+    public function getAtrsWithLimitForAdmin($offset = 0, $limit = 15)
+    {
+        $works = $this->db->getAllWithLimit($this->tableName, $limit, $offset);
+        for ($i = 0; $i < count($works); $i++) {
+            $user = $this->db->getFromTable('users', 'id', $works[$i]['author_id']);
+            $works[$i]['user'] = [
+                'login' => $user['login'],
+                'is_admin' => $user['is_admin'],
+                'user_image' => $user['user_image']
+            ];
+        }
+        return $works;
+    }
+
+    private
+    function deleteImage(
+        $from,
+        $name
+    ) {
         $path = 'portfolio' . '/' . $from . '/' . $name;
         if (!unlink($path)) {
             return ['error' => 'Файл не видалено'];
@@ -197,8 +229,10 @@ class Art
         return $res;
     }
 
-    public function deletePortfolioItem($id)
-    {
+    public
+    function deletePortfolioItem(
+        $id
+    ) {
         $images = $this->db->getAllImagesForPortfolio($id);
         $logo = $this->db->getFromTable($this->tableName, 'id', $id);
         $res = $this->db->deleteFromTable($this->tableName, 'id', $id);
@@ -228,5 +262,38 @@ class Art
         } else {
             return [false => 'Логотип не змінено'];
         }
+    }
+
+    public function setNewLogoByID($oldLogoID, $newLogoID)
+    {
+        $oldLogo = $this->db->getFromTable($this->tableName, 'id', $oldLogoID)['portfolio_logo'];
+        $newLogo = $this->db->getFromTable('images_for_portfolio', 'id', $newLogoID)['image_name'];
+        try {
+            $rename1 = rename('portfolio/logo/' . $oldLogo, 'portfolio/images/' . $oldLogo);
+            $rename2 = rename('portfolio/images/' . $newLogo, 'portfolio/logo/' . $newLogo);
+            if ($rename1 && $rename2) {
+            } else {
+                throw new \Exception('Не переміщено файлии');
+            }
+        } catch (\Exception $e) {
+            return [false => $e];
+        }
+        $res = $this->db->setNewPortfolioLogo($oldLogo, $newLogo);
+        $res2 = $this->db->movePortfolioLogoToPortflioItem($oldLogo, $newLogo);
+        if (isset($res['ok']) && isset($res2['ok'])) {
+            return ['ok' => true, 'message' => 'Логотип успішно змінено'];
+        } else {
+            return ['ok' => false, 'message' => 'Логотип не змінено'];
+        }
+    }
+
+    public function deleteImageByID($id)
+    {
+        $image = $this->db->getFromTable('images_for_portfolio', 'id', $id);
+        $res = $this->db->deleteFromTable('images_for_portfolio', 'id', $id);
+        if (isset($res['ok'])) {
+            return $this->deleteImage('images', $image['image_name']);
+        }
+        return $res;
     }
 }

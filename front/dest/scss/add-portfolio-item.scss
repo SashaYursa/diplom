@@ -65,22 +65,29 @@
   opacity: 0;
 }
 .image__field.active {
-  opacity: 1;
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
+  justify-content: space-evenly;
   padding: 10px;
-  justify-content: start;
+  margin: 10px;
   overflow: hidden;
   border: 1px solid #000;
   border-radius: 6px;
-  margin: 10px;
+  opacity: 1;
 }
+
 .selected-image {
   object-fit: cover;
-  width: 49%;
   height: 300px;
   border-radius: 6px;
+  width: 100%;
+  &.logo{
+    border: 2px solid #03f924;
+    padding: 2px;
+    height: 295px;
+    width: 98%;
+  }
 }
 
 .work__logo {
@@ -91,6 +98,26 @@
 }
 
 .work-button {
+}
+
+.delete-image{
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 30px;
+  height: 30px;
+  border: none;
+  background-color: #eeeeee00;
+  background-image: url(../images/remove.png);
+  background-size: 100%;
+  background-repeat: no-repeat;
+  cursor: pointer;
+
+}
+.image-container{
+  width: 49%;
+  overflow: hidden;
+  position: relative;
 }
 
 .work__image-errors {

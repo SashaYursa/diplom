@@ -38,5 +38,11 @@ async function outUser(data, user) {
 
 async function main(link, token, userField) {
   let user = await getUser(link, token);
-  await outUser(user, userField);
+  if (user.error === undefined) {
+    await outUser(user, userField);
+    return;
+  }
+  localStorage.clear();
+  sessionStorage.clear();
+  userField.innerHTML = 'Увійти';
 }

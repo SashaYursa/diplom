@@ -20,19 +20,30 @@ main{
 
 .user-information {
   display: flex;
+  align-items: center;
+  justify-items: center;
   flex-direction: column;
   background-color: #fff;
   border: 1px solid #eaeaea;
   border-radius: 6px;
   min-width: 360px;
+}
+.user-information__data{
+  display: flex;
+  flex-direction: column;
   align-items: center;
   padding: 20px 10px;
   height: 50vh;
   min-height: 400px;
 max-width: 500px;
+display: none;
+  &.active{
+    display: contents;
+  }
 }
 
 .user-information__img {
+  margin-top: 60px;
 }
 .user-information__img img {
   border-radius: 50%;
@@ -40,7 +51,6 @@ max-width: 500px;
   object-fit: cover;
   width: 110px;
   height: 110px;
-  margin-top: 60px;
 }
 .user-information__name {
   margin-top: 20px;
@@ -55,12 +65,191 @@ max-width: 500px;
   font-size: 16px;
   margin-top: 15px;
 }
-.user-information__name {
+.user-information__buttons {
+  display: flex;
+  margin: 40px 0 20px 0;
+  gap: 15px;
+  align-items: center;
+  justify-content: space-around;
+  width: 100%;
+  flex-direction: column-reverse;
 }
-.user-information__email {
+.user-information__button {
+  width: 50%;
+  display: block;
+  padding: 9px;
+  color: #090909;
+  border-radius: 20px;
+  font-weight: 700;
+  font-size: 14px;
+  border: none;
+  cursor: pointer;
+  background: none;
+  background-color: #1919192e;
+transition:  all 0.3s ease 0s;
+  &:hover{
+    background-color: #000000;
+    color: #fff;
+  }
 }
-.user-information__created-at {
+.logout-button {
 }
+.edit-button {
+}
+.admin-button{
+  background-color: #248540;
+  color: #fff;
+}
+
+// Редагування
+.user-information__edit {
+display: none;
+&.active{
+  display: contents;
+}
+}
+.user-information__form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 75%;
+}
+.user-image {
+  border-radius: 50%;
+  object-fit: cover;
+  width: 110px;
+  height: 110px;
+  position: relative;
+}
+.image-preview {
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  object-fit: cover;
+  border-radius: 50%;
+}
+.image-preview img{
+  object-fit: cover;
+  height: 100%;
+  width: 100%;
+}
+.user-set-image {
+  position: absolute;
+  bottom: 0;
+  padding: 0;
+  left: 0;
+  width: 31px;
+  height: 31px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  overflow: hidden;
+  background-color: #08080862;
+  &:hover{
+    background-color: #000000;
+  }
+}
+.image-input{
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  padding-left: 100px;
+  opacity: 0;
+  cursor: pointer;
+  z-index: 2;
+}
+.user-set-image img{
+  height: 25px;
+  width: 25px;
+  object-fit: cover;
+  cursor: pointer;
+}
+
+.user-informaion__input {
+}
+
+.edit-lable {
+  align-self: flex-start;
+  font-size: 20px;
+  margin-top: 10px;
+}
+.edit-ipnut {
+  width: 92%;
+  margin-top: 10px;
+  border: 1px solid #d8d7d7;
+  border-radius: 6px;
+  background:none;
+  padding: 5px 10px;
+  font-size: 20px;
+  outline: none;
+  &:focus{
+    border-color: #6fc4e5;
+  }
+}
+.edit-success-field {
+  width: 100%;
+}
+.success-list {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: 5px;
+
+}
+.success-item{
+font-size: 16px;
+color: #10af3d;
+margin: 20px 0 0;
+}
+
+.edit-error-field {
+  width: 100%;
+}
+.error-list {
+  display: flex;
+  align-items: start;
+  flex-direction: column;
+  gap: 5px;
+  max-width: 270px;
+}
+.error-item {
+  margin-top: 10px;
+  color: red;
+  font-size: 16px;
+}
+.edit-action-buttons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin: 20px 0;
+  width: 100%;
+}
+.edit-action-button {
+  width: 100%;
+  display: block;
+  padding: 9px;
+  color: #090909;
+  border-radius: 20px;
+  font-weight: 700;
+  font-size: 14px;
+  border: none;
+  cursor: pointer;
+  background: none;
+  background-color: #1919192e;
+transition:  all 0.3s ease 0s;
+  &:hover{
+    background-color: #000000;
+    color: #fff;
+  }
+}
+// Кінець редагування
 .user-works {
   flex: 1 1 auto;
 }
@@ -175,6 +364,11 @@ transition:  all 0.3s ease 0s;
 
 
 @media (max-width: 1300px){
+  .user-information__buttons {
+    margin-top: 20px;
+    flex-direction: row-reverse;
+    width: 70%;
+  }
   .user__content{
     display: flex;
     flex-direction: column;
@@ -202,8 +396,21 @@ transition:  all 0.3s ease 0s;
   .user-information__created-at{
     max-width: 70%;
   }
+  .user-information__img{
+    margin-top: 0;
+  }
   .user-information__img img {
-    margin-top: 10px;
+  }
+}
+@media (max-width: 670px){
+  .user-information__buttons {
+    margin-top: 20px;
+    flex-direction: column-reverse;
+    width: 90%;
+    max-width: 300px;
+  }
+  .user-information__button{
+    width: 100%;
   }
 }
 //========main end========

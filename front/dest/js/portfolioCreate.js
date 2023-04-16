@@ -113,21 +113,57 @@ function fileHandler(file) {
     let size = file.size / 1024 / 1024;
     if (size > 5) {
       return outError('Максимальний розмір файлу 5мб');
-
     }
-    if (!file.name.match(/\.(jpg|jpeg|png|gif|jfif)$/i)) {
+    let status = true;
+    fileList.forEach(element => {
+      if (element.name === file.name) {
+        status = false;
+      }
+    });
+    if (!status) {
+      return outError('Таку картинку вже завантажено');
+    }
+    if (!file.name.match(/\.(jpg|jpeg|png|gif|jfif|svg)$/i)) {
       return outError('Можна додавати тільки картинки');
 
     }
-
-    let url = URL.createObjectURL(file);
     const imageField = document.querySelector('.image__field');
+    let imgContainer = document.createElement('div');
+    let imgElement = document.createElement('img');
+    let imgRemove = document.createElement('button');
+
+    imgContainer.classList.add('image-container');
+    imgElement.classList.add('selected-image');
+    imgRemove.classList.add('delete-image');
+    imgRemove.id = file.name;
+    let url = URL.createObjectURL(file);
+    imgElement.src = url;
+    console.log(imgRemove.id);
+    imgContainer.appendChild(imgElement);
+    imgContainer.appendChild(imgRemove);
+    imageField.appendChild(imgContainer);
+
     imageField.classList.add('active');
-    imageField.innerHTML += '<img class="selected-image" id="imageField" src="' + url + '" alt="image">';
-    imageField.src = url;
+
     fileList.push(file);
-    console.log(fileList, 'filelist');
+    createRemoveEvent(imgRemove);
   }
+}
+
+function createRemoveEvent(removeElement) {
+
+  removeElement.addEventListener('click', e => {
+    e.preventDefault();
+    let temp = [];
+    fileList.forEach(el => {
+      if (el.name !== removeElement.id) {
+        temp.push(el);
+      }
+    });
+    fileList = temp;
+    console.log(fileList);
+    removeElement.parentElement.remove();
+  });
 }
 
 function outError(error) {

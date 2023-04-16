@@ -31,7 +31,13 @@ function createUser() {
   let userEmail = document.getElementById('email-field').value;
   if (userPassword !== userPasswordVerify) {
     errors.push('Паролі не співпадають');
-    outErrors(errors);
+    return outErrors(errors);
+  }
+  const validationRegExp = new RegExp(/^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/i);
+  if (!validationRegExp.test(userEmail)) {
+    console.log('312312');
+    errors.push('Email введено некоректно');
+    return outErrors(errors);
   }
   if (errors.length === 0) {
 

@@ -22,8 +22,42 @@
     <meta property="og:description" content="desc">
 
     <link href="../dest/mincss/reset.min.css" rel="stylesheet">
-    <link href="../dest/mincss/user.min.css" rel="stylesheet">
   </head>
+  <style>
+    body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      margin-top: 100px;
+      gap: 100px;
+    }
+
+    .error__header {
+      font-size: 40px;
+      color: rgb(69, 69, 69);
+    }
+
+    .error__link {
+      font-size: 20px;
+      text-decoration: none;
+      color: rgb(255, 255, 255);
+      transition: all ease .3s;
+      border: 1px solid #000000;
+      border-radius: 6px;
+      padding: 5px 10px;
+      background-color: #348e46;
+      border: 1px solid;
+
+    }
+
+    .error__link:hover {
+      color: #000000;
+      background-color: #ffffff;
+      border: 1px solid #ffffff;
+    }
+
+  </style>
 
   <body class="body">
     <h1 class="error__header">Сторінку не знайдено</h1>

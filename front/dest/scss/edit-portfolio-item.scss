@@ -122,3 +122,19 @@
   overflow: hidden;
   position: relative;
 }
+
+.work__image-errors {
+  margin: 10px 0 10px 20px;
+  }
+  .work__image-error {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    list-style: none;
+  }
+  .error-text {
+    font-size: 18px;
+    color: red;
+    font-style: italic;
+  }
+

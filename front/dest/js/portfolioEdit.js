@@ -2,7 +2,7 @@ const portfolioLink = 'http://artist-blog.ua/backend/arts';
 
 const queryString = window.location.search;
 const urlParams = new URLSearchParams(queryString);
-const itemID = urlParams.get('id');
+const itemID = urlParams.get('id').replace(/\D/g, "");
 let portfolioName = document.getElementById('work-name');
 let description = document.getElementById('work-description');
 let imageField = document.querySelector('.image__field');
@@ -103,7 +103,10 @@ async function createImageEvent(imageField, portfolioItem) {
   deletes.forEach(element => {
     element.addEventListener('click', async e => {
       e.preventDefault();
-      await removeImage(element.id, portfolioItem, element);
+      let accept = confirm("Ви дійсно хочете видалити картинку?");
+      if (accept) {
+        await removeImage(element.id, portfolioItem, element);
+      }
     });
   });
 
@@ -131,15 +134,13 @@ async function setLogo(logoName, imageName) {
 async function removeImage(imageName, portfolioItem, element) {
   let imageContainer = element.parentElement;
   let removeFrom = 'user';
-  if (imageName === portfolioItem.portfolioLogo) {
-    console.log('logo');
-    removeFrom = 'logo';
-  }
   for (let i = 0; i < portfolioItem.portfolioImages.length; i++) {
     if (portfolioItem.portfolioImages[i] === imageName) {
-      console.log('imageee');
       removeFrom = 'images';
     }
+  }
+  if (imageContainer.querySelector('img').classList[1] === 'logo') {
+    removeFrom = 'logo';
   }
 
   if (removeFrom !== 'user') {
@@ -177,7 +178,7 @@ async function removeImage(imageName, portfolioItem, element) {
   }
 }
 
-async function createSendEvent(data) {
+async function createSendEvent() {
   const send = document.querySelector('.work__submit');
   send.addEventListener('click', async e => {
     e.preventDefault();
@@ -236,7 +237,6 @@ file.addEventListener('change', (e) => {
 });
 
 function fileHandler(file) {
-  console.log(fileList);
   dragAndDrop.classList.remove('active');
   let status = true;
   if (file != null || file != undefined) {
@@ -245,8 +245,17 @@ function fileHandler(file) {
         status = false;
       }
     });
+    let size = file.size / 1024 / 1024;
+    if (size > 5) {
+      return outError('Максимальний розмір файлу 5мб');
+
+    }
+    if (!file.name.match(/\.(jpg|jpeg|png|gif|jfif|svg)$/i)) {
+      return outError('Можна додавати тільки картинки');
+
+    }
     if (!status) {
-      return;
+      return outError('Можна додавати тільки картинки');
     }
     let imageName = file.name;
 
@@ -268,21 +277,32 @@ function fileHandler(file) {
     imgContainer.appendChild(imgElement);
     imgContainer.appendChild(imgRemove);
     imageField.appendChild(imgContainer);
-    // const imageField = document.querySelector('.image__field');
-    // imageField.classList.add('active');
-    // imageField.innerHTML += '<img class="selected-image" id="imageField" src="' + url + '" alt="image">';
-    // imageField.src = url;
     fileList.push(file);
 
     imgElement.addEventListener('click', (e) => {
       e.preventDefault();
+      alert('Дану картинку можна зробити логотипом тільки після завантаження на сервер');
     });
     imgRemove.addEventListener('click', (e) => {
       e.preventDefault();
-      removeImage(imageName, portfolioItem, imgRemove);
+      let accept = confirm("Ви дійсно хочете видалити картинку?");
+      if (accept) {
+        removeImage(imageName, portfolioItem, imgRemove);
+      }
+
     })
   }
 }
+
+function outError(error) {
+  let errorList = document.querySelector('.work__image-error');
+  errorList.innerHTML = '';
+  let errorNode = document.createElement('li');
+  errorNode.classList.add('error-text');
+  errorNode.textContent = error;
+  errorList.appendChild(errorNode);
+}
+
 
 
 main(itemID);
@@ -300,108 +320,3 @@ async function main(itemID) {
   await createSendEvent(portfolioItem);
   await createImageEvent(imageField, portfolioItem);
 }
-
-// const send = document.querySelector('.work__submit');
-// const form = document.querySelector('work__form');
-// let fileList = [];
-// send.addEventListener('click', e => {
-//   e.preventDefault();
-//   const token = getUserToken();
-//   if (token === 0) {
-//     return 0;
-//   }
-//   const name = document.querySelector('.work__name').value;
-//   const description = document.querySelector('.work__description').value;
-//   const formData = new FormData();
-//   formData.append('userToken', token);
-//   formData.append('name', name);
-//   formData.append('description', description);
-//   formData.append('logo', fileList[0]);
-//   fetch(portfolioLink, {
-//     method: 'POST',
-//     headers: {
-//       'status': 'create-portfolio',
-//     },
-//     body: formData
-//   }).then(response => response.json())
-//     .then(data => {
-//       fileList.shift();
-//       if (data['status']) {
-//         fileList.forEach(element => {
-//           pushImages(data['id'], element);
-//         });
-//       } else {
-//         console.log('Помилка:', data);
-//       }
-//     });
-// });
-
-// function pushImages(id, image) {
-//   const formData = new FormData();
-//   formData.append('id', id);
-//   formData.append('image', image);
-//   fetch(portfolioLink, {
-//     method: 'POST',
-//     headers: {
-//       'status': 'add-image-for-portfolio',
-//     },
-//     body: formData
-//   }).then(response => response.json())
-//     .then(data => {
-//       console.log(data);
-//     });
-// }
-
-
-
-
-
-// const dragAndDrop = document.getElementById('dropZone');
-
-// dragAndDrop.addEventListener('dragenter', e => {
-//   e.preventDefault();
-//   dragAndDrop.classList.add('active');
-//   console.log('dragenter');
-// });
-
-// dragAndDrop.addEventListener("dragleave", e => {
-//   e.preventDefault();
-//   dragAndDrop.classList.remove('active');
-//   console.log('dragleave');
-// });
-
-// dragAndDrop.addEventListener('drop', (e) => {
-//   e.preventDefault();
-//   let file = e.dataTransfer.files[0];
-//   fileHandler(file);
-
-// });
-
-// dragAndDrop.addEventListener('dragover', (e) => { e.preventDefault() }, false);
-
-// const file = document.querySelector('.file__button');
-
-// dragAndDrop.addEventListener('click', (e) => {
-//   e.preventDefault();
-//   console.log('click');
-//   dragAndDrop.classList.add('active');
-//   file.click();
-// });
-
-// file.addEventListener('change', (e) => {
-//   console.log(e);
-//   fileHandler(file.files[0]);
-// });
-
-// function fileHandler(file) {
-//   console.log('as');
-//   dragAndDrop.classList.remove('active');
-//   if (file != null || file != undefined) {
-//     let url = URL.createObjectURL(file);
-//     const imageField = document.querySelector('.image__field');
-//     imageField.classList.add('active');
-//     imageField.innerHTML += '<img class="selected-image" id="imageField" src="' + url + '" alt="image">';
-//     imageField.src = url;
-//     fileList.push(file);
-//   }
-// }

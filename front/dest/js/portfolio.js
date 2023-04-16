@@ -49,8 +49,6 @@ async function getCountPages(items) {
   itemCount = responseData.items;
 }
 
-
-
 async function displayPagination() {
   const paginationElement = document.querySelector('.pagination');
   paginationElement.innerHTML = '';
@@ -292,7 +290,7 @@ async function popupSetInforamation(currentPopup, itemID) {
   <div class="popup__body">
     <a href="##" class="popup__area"></a>
     <div class="popup__content">
-      <a href="##" class="popup__close close-popup">x</a>
+      <a href="##" class="popup__close close-popup">&times;</a>
       <div class="popup__title"></div>
       <img class="popup__image" src="" alt="main-img">
       <div class="popup__text"></div>

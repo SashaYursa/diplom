@@ -63,7 +63,7 @@ class DB
     }
 
     //Отримання всіх записів з таблиціз із заданим лімітом
-    public function getAllWithLimit($table, $offset = 0, $limit = 10): array
+    public function getAllWithLimit($table, $limit = 10, $offset = 0): array
     {
         $sql = "SELECT * FROM `${table}` LIMIT ${limit} OFFSET ${offset}";
         try {
@@ -206,7 +206,7 @@ class DB
 
     public function getAllImagesForPortfolio($portfolioID)
     {
-        $sql = "SELECT `image_name` FROM `images_for_portfolio` WHERE `portfolio_id` = ${portfolioID}";
+        $sql = "SELECT * FROM `images_for_portfolio` WHERE `portfolio_id` = ${portfolioID}";
         return $this->query($sql);
     }
 
