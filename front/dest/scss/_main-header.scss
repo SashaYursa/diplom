@@ -50,6 +50,10 @@
   color: #ffffff;
   text-decoration: none;
   text-transform: capitalize;
+  max-width: 150px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .vertical-line {
@@ -80,6 +84,9 @@
 }
 
 .menu__search-form {
+  display: flex;
+  align-items: center;
+  gap: 5px;
   border: none;
   border-radius: 12px;
 }
@@ -92,7 +99,7 @@
 
 .menu__search-input {
   min-width: 10vw;
-  max-width: 20vw;
+  max-width: 15vw;
   height: 25px;
   padding-left: 10px;
   font-size: 18px;
@@ -103,8 +110,8 @@
 }
 
 .menu__search-input:focus {
-  width: 30vw;
-  max-width: 30vw;
+  width: 20vw;
+  max-width: 20vw;
   background-color: #ffffff;
 }
 
@@ -277,6 +284,7 @@
 
   .menu__link {
     font-size: 30px;
+
   }
 
   .menu__login-button {

@@ -296,4 +296,38 @@ class Art
         }
         return $res;
     }
+
+    public function updateStatus($id, $status)
+    {
+        $res = [];
+        switch ($status) {
+            case 'process':
+            case 'hide':
+                $this->db->updateItemInTable($this->tableName, 'hide', '0', $id);
+                $res = ['status' => true, 'message' => 'Переміщено в активний статус'];
+                break;
+            case 'visible':
+                $this->db->updateItemInTable($this->tableName, 'hide', '1', $id);
+                $res = ['status' => true, 'message' => 'Переміщено в неактивний статус'];
+                break;
+            default:
+                $res = ['status' => false];
+        }
+        return $res;
+    }
+
+    public function search($val)
+    {
+        $res = [];
+        $response = $this->db->searchInTable($this->tableName, 'name', $val);
+        foreach ($response as $key => $val) {
+            if ($val['hide'] === 0) {
+                $res[$key]['id'] = $val['id'];
+                $res[$key]['name'] = $val['name'];
+                $res[$key]['description'] = $val['description'];
+                $res[$key]['portfolio_logo'] = $val['portfolio_logo'];
+            }
+        }
+        return $res;
+    }
 }

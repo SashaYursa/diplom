@@ -182,6 +182,21 @@ async function createSendEvent() {
   const send = document.querySelector('.work__submit');
   send.addEventListener('click', async e => {
     e.preventDefault();
+    const name = document.querySelector('.work__name').value;
+    const description = document.querySelector('.work__description').value;
+    console.log(description.length);
+    if (name.length < 5) {
+      return outError('Назва має складатися як мінімум з 5 символів');
+    }
+    if (name.length > 300) {
+      return outError('Максимальна кількість символів в назві 300, зараз: ' + name.length);
+    }
+    if (description.length < 5) {
+      return outError('Опис роботи має складатися як мінімум з 5 символів');
+    }
+    if (description.length > 2000) {
+      return outError('Максимальна кількість символів в описі 2000, зараз: ' + description.length);
+    }
     let data = new FormData();
     data.append('editedName', portfolioName.value);
     data.append('editedDesc', description.value);

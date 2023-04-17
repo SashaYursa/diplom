@@ -68,12 +68,15 @@ if ($method === 'DELETE') {
 if ($method === 'PATCH') {
     $art = new Art();
     if (isset($headers['status'])) {
+        $data = json_decode(file_get_contents('php://input'), true);
         if ($headers['status'] === 'update-logo') {
-            $data = json_decode(file_get_contents('php://input'), true);
             $oldLogo = $data['oldLogoName'];
             $newLogo = $data['newLogoName'];
             $res = $art->setNewLogoByID($oldLogo, $newLogo);
             echo json_encode($res);
+        }
+        if ($headers['status'] === 'update-status') {
+            echo json_encode($art->updateStatus($data['workID'], $data['status']));
         }
     }
 }

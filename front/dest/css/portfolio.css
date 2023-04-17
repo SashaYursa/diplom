@@ -72,6 +72,10 @@ body {
   color: #ffffff;
   text-decoration: none;
   text-transform: capitalize;
+  max-width: 150px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .vertical-line {
@@ -108,7 +112,7 @@ body {
 
 .menu__search-input {
   min-width: 10vw;
-  max-width: 20vw;
+  max-width: 15vw;
   height: 25px;
   padding-left: 10px;
   font-size: 18px;
@@ -120,6 +124,8 @@ body {
 
 .menu__search-input:focus {
   background-color: #dddddd;
+  width: 20vw;
+  max-width: 20vw;
 }
 
 .menu__search-submit {
@@ -489,6 +495,8 @@ main {
   align-self: center;
   font-weight: 700;
   color: #696969;
+  overflow-wrap: break-word;
+  max-width: 95%;
 }
 
 .popup__text {

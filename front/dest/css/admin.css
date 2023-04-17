@@ -243,6 +243,33 @@ tr:nth-child(even) {
   align-items: center;
 }
 
+.status-button {
+  width: 95%;
+  display: block;
+  margin: 5px auto;
+  border: none;
+  border-radius: 6px;
+  padding: 5px 10px;
+  cursor: pointer;
+  font-weight: 400;
+  cursor: pointer;
+  color: #fff;
+  border: 0;
+}
+.status-button.visible {
+  background-color: green;
+}
+.status-button.hide {
+  background-color: red;
+}
+.status-button.in-proccess {
+  background-color: #cbcb00;
+}
+.status-button:disabled {
+  background-color: #aaaaaa;
+  cursor: default;
+}
+
 .user-info-header {
   font-size: 24px;
   font-weight: 700;
@@ -276,6 +303,8 @@ tr:nth-child(even) {
 
 .user-info-item {
   font-size: 20px;
+  max-width: 33%;
+  overflow-wrap: break-word;
 }
 
 .work-user-container {

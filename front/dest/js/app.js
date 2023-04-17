@@ -10,7 +10,16 @@ setTimeout(() => {
     body.classList.toggle('lock');
     searchBar.classList.toggle('active');
   });
+  let searchButton = document.querySelector('.menu__search-submit');
+  searchButton.addEventListener('click', e => {
+    e.preventDefault();
+    const searchField = document.querySelector('.menu__search-input');
+    if (searchField.value.length > 0) {
+      window.location.href = 'http://artist-blog.ua/front/search/?q=' + searchField.value;
+    }
+  });
 }, 1000);
+
 
 
 

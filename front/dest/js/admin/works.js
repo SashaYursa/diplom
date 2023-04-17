@@ -5,10 +5,12 @@ let { refresh } = await import('./loadItems.js');
 let fileList = [];
 
 async function addItemsHandler(userTemplate, userAccess) {
-  let deleteButtons = userTemplate.querySelectorAll('.work-delete-button');
-  let editeButtons = userTemplate.querySelectorAll('.work-edit-button');
+  const deleteButtons = userTemplate.querySelectorAll('.work-delete-button');
+  const editeButtons = userTemplate.querySelectorAll('.work-edit-button');
+  const statusButtons = userTemplate.querySelectorAll('.status-button');
   addDeleteHandler(deleteButtons);
   addEditHandler(editeButtons, userAccess);
+  addStatusHandler(statusButtons);
 }
 
 
@@ -438,6 +440,30 @@ function outError(error) {
   errorItem.classList.add('error-item');
   errorItem.textContent = error;
   errorField.appendChild(errorItem);
+}
+
+function addStatusHandler(buttons) {
+  buttons.forEach(button => {
+    button.addEventListener('click', async e => {
+      e.preventDefault();
+      const id = button.id.split('-');
+      let response = await fetch(worksLink, {
+        method: 'PATCH',
+        headers: {
+          'status': 'update-status'
+        },
+        body: JSON.stringify({
+          'workID': id[0],
+          'status': id[1],
+        })
+      });
+      response = await response.json();
+      if (response.status) {
+        alert(response.message);
+        await refresh('works');
+      }
+    });
+  });
 }
 
 export default addItemsHandler;

@@ -14,8 +14,8 @@ send.addEventListener('click', e => {
   if (name.length < 5) {
     return outError('Назва має складатися як мінімум з 5 символів');
   }
-  if (name.length > 100) {
-    return outError('Максимальна кількість символів в назві 100, зараз: ' + name.length);
+  if (name.length > 300) {
+    return outError('Максимальна кількість символів в назві 300, зараз: ' + name.length);
   }
   if (description.length < 5) {
     return outError('Опис роботи має складатися як мінімум з 5 символів');

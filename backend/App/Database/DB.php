@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Database;
 
+use mysql_xdevapi\Exception;
 use PDO;
 
 class DB
@@ -229,6 +230,16 @@ class DB
             return ['ok' => "Запис в таблиці видалено"];
         } catch (Exception) {
             return ['error' => "Запис не видалено"];
+        }
+    }
+
+    public function searchInTable($table, $param, $search)
+    {
+        $sql = "SELECT * FROM `${table}` WHERE `${table}`.`${param}` LIKE '${search}%'";
+        try {
+            return $this->query($sql);
+        } catch (Exception $e) {
+            return ['error' => $e];
         }
     }
 }

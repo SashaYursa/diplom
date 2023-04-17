@@ -159,6 +159,7 @@ function setWorks(items, offset, userAccess, templateContainer, templateHeader, 
     let description = document.createElement('td');
     let createdAt = document.createElement('td');
     let status = document.createElement('td');
+    let statusButton = document.createElement('button');
     let userWhoCreate = document.createElement('td');
     let userWhoCreateContainer = document.createElement('div');
     let userWhoCreateImage = document.createElement('img');
@@ -193,6 +194,8 @@ function setWorks(items, offset, userAccess, templateContainer, templateHeader, 
     userWhoCreateContainer.appendChild(userWhoCreateImage);
     userWhoCreateContainer.appendChild(userWhoCreateName);
     userWhoCreate.appendChild(userWhoCreateContainer);
+    status.appendChild(statusButton);
+    statusButton.classList.add('status-button');
     buttons.classList.add('work-buttons');
     buttons.classList.add('table-buttons');
     deleteButton.classList.add('work-delete-button');
@@ -222,13 +225,19 @@ function setWorks(items, offset, userAccess, templateContainer, templateHeader, 
     deleteButton.id = 'delete-' + element.id;
 
     if (element.hide === 0) {
-      status.textContent = 'Показується';
+      statusButton.textContent = 'Показується';
+      statusButton.classList.add('visible');
+      statusButton.id = element.id + '-visible';
     }
     if (element.hide === 1) {
-      status.textContent = 'Приховано';
+      statusButton.textContent = 'Приховано';
+      statusButton.classList.add('hide');
+      statusButton.id = element.id + '-hide';
     }
     if (element.hide === 2) {
-      status.textContent = 'В очікуванні';
+      statusButton.textContent = 'В очікуванні';
+      statusButton.classList.add('in-proccess');
+      statusButton.id = element.id + '-process';
     }
 
     if (element.user.user_image === 'empty') {
@@ -241,6 +250,9 @@ function setWorks(items, offset, userAccess, templateContainer, templateHeader, 
     if (element.user.is_admin == 0 || userAccess == 2 && element.user.is_admin == 1) {
       buttons.appendChild(deleteButton);
       buttons.appendChild(editButton);
+    }
+    else {
+      statusButton.disabled = true;
     }
 
     templateBody.appendChild(tr);

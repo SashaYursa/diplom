@@ -76,7 +76,7 @@ async function displayPagination() {
       itemsCount = ItemsInPage * (myParam - 1);
       offset = itemsCount + ItemsInPage;
       loadData();
-      window.scrollTo(0, 0)
+      window.scrollTo(0, 0);
     });
   }
 

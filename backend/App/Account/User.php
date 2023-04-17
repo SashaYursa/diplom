@@ -128,4 +128,16 @@ class User
         return ['status' => false, 'message' => $param . ' не змінено'];
     }
 
+    public function search($val)
+    {
+        $res = [];
+        $response = $this->db->searchInTable($this->tableName, 'login', $val);
+        foreach ($response as $key => $val) {
+            $res[$key]['id'] = $val['id'];
+            $res[$key]['login'] = $val['login'];
+            $res[$key]['email'] = $val['email'];
+            $res[$key]['user_image'] = $val['user_image'];
+        }
+        return $res;
+    }
 }
