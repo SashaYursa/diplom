@@ -95,6 +95,9 @@
 .menu__search-form {
   border: none;
   border-radius: 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 .menu__search-input {

@@ -251,7 +251,7 @@ function setWorks(items, offset, userAccess, templateContainer, templateHeader, 
       buttons.appendChild(deleteButton);
       buttons.appendChild(editButton);
     }
-    else {
+    if (userAccess == 1 && element.user.is_admin == 2) {
       statusButton.disabled = true;
     }
 

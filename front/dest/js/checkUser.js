@@ -9,17 +9,17 @@ window.onload = function () {
   }
   const userToken = sessionStorage.getItem('user_token') || localStorage.getItem('user_token') || 0;
   if (userToken !== 0) {
-    main(link, userToken, userField);
+    main(userToken, userField);
   }
   else {
     userField.innerHTML = 'Увійти';
   }
 }
 
-async function getUser(link, token) {
+async function getUser(token) {
   let newlink = link + '?token=' + token;
   let response = await fetch(newlink);
-  return response.json();
+  return await response.json();
 }
 async function outUser(data, user) {
   userID = data['id'];
@@ -36,8 +36,8 @@ async function outUser(data, user) {
   }
 }
 
-async function main(link, token, userField) {
-  let user = await getUser(link, token);
+async function main(token, userField) {
+  let user = await getUser(token);
   if (user.error === undefined) {
     await outUser(user, userField);
     return;

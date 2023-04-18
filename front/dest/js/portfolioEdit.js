@@ -199,7 +199,7 @@ async function createSendEvent() {
     }
     let data = new FormData();
     data.append('editedName', portfolioName.value);
-    data.append('editedDesc', description.value);
+    data.append('editedDesc', description);
     data.append('itemID', itemID);
     for (let i = 0; i < fileList.length; i++) {
       data.append('image' + i, fileList[i]);

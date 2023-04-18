@@ -88,9 +88,9 @@ class DB
         }
     }
 
-    public function getCountElementsWithParam($table, $param, $value)
+    public function getCountElementsWithParam($table, $element, $param, $value)
     {
-        $sql = "SELECT COUNT(id) as 'count' FROM `${table}` WHERE `${param}` = '${value}'";
+        $sql = "SELECT COUNT($element) as 'count' FROM `${table}` WHERE `${param}` = '${value}'";
         $result = $this->query($sql);
         return $result;
     }
@@ -109,6 +109,17 @@ class DB
         $result = $this->query($sql);
         if (!empty($result)) {
             return $result[0];
+        } else {
+            return ['error' => 'Записів не знайдено'];
+        }
+    }
+
+    public function getFieldFromTable($table, $field, $param, $value): array
+    {
+        $sql = "SELECT ${field} FROM `${table}` WHERE `${table}`.`${param}` = '${value}' ORDER BY ${field} DESC";
+        $result = $this->query($sql);
+        if (!empty($result)) {
+            return $result;
         } else {
             return ['error' => 'Записів не знайдено'];
         }
@@ -238,8 +249,40 @@ class DB
         $sql = "SELECT * FROM `${table}` WHERE `${table}`.`${param}` LIKE '${search}%'";
         try {
             return $this->query($sql);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return ['error' => $e];
+        }
+    }
+
+    public function checkLike($portfolioID, $userID)
+    {
+        $sql = "SELECT * FROM `likes_for_portfolio` WHERE `likes_for_portfolio`.`user_id` = $userID and `likes_for_portfolio`.`portfolio_id` = $portfolioID";
+        try {
+            return $this->query($sql);
+        } catch (\Exception $e) {
+            return ['error' => $e];
+        }
+    }
+
+    public function insertLike($portfolioID, $userID)
+    {
+        $sql = "INSERT INTO `likes_for_portfolio` (`id`, `portfolio_id`, `user_id`) VALUES (NULL, '${portfolioID}', '${userID}')";
+        try {
+            $this->execute($sql);
+            return ['ok' => true];
+        } catch (Exception) {
+            return ['ok' => false];
+        }
+    }
+
+    public function removeLike($userID)
+    {
+        $sql = "DELETE FROM likes_for_portfolio WHERE `likes_for_portfolio`.`user_id` = ${userID}";
+        try {
+            $this->execute($sql);
+            return ['ok' => true];
+        } catch (\Exception $e) {
+            return ['ok' => false, 'error' => $e];
         }
     }
 }

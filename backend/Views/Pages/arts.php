@@ -38,7 +38,6 @@ if ($method === 'POST') {
         $userID = $findUser['id'];
 
         $portfolioItem = $art->checkUserCanEditArt($userID, $itemID);
-        //echo json_encode($portfolioItem[0]);
         if (!$portfolioItem) {
             $result = ['error' => 'Редагувати дану роботу неможливо', 'portfolioItem' => $portfolioItem];
         } else {
@@ -102,11 +101,18 @@ if ($method === 'GET') {
     if ($headers['status'] === 'get-info') {
         header("Content-type: json/application");
         if (isset($_GET['item'])) {
-            $res = $art->getArtByOffset($_GET['item']);
+            $res = $art->getArtByID($_GET['item']);
         }
         if (isset($_GET['id'])) {
+            $user = new User();
             $res = $art->getArtByID($_GET['id']);
             $res['countImages'] = $art->getCountImages($_GET['id']);
+            $userData = $user->getUser('id', strval($res['author_id']));
+            $res['user'] = [
+                'user_image' => $userData['user_image'],
+                'login' => $userData['login'],
+                'email' => $userData['email']
+            ];
         }
         echo json_encode($res);
     }
@@ -127,9 +133,20 @@ if ($method === 'GET') {
     }
     if ($headers['status'] === 'get-count-pages') {
         if (isset($_GET['itemsInPage'])) {
-            $items = $art->getPages();
-            $pages = ceil($items['count'] / $_GET['itemsInPage']);
-            echo json_encode(['pages' => $pages, 'items' => $items['count']]);;
+            $items = $art->getVisiblePages();
+            $countPages = ceil(count($items) / $_GET['itemsInPage']);
+            $pages = [];
+            for ($i = 1; $i <= $countPages; $i++) {
+                $offset = ($i - 1) * $_GET['itemsInPage'];
+                $page = [];
+                for ($j = 0; $j < $_GET['itemsInPage']; $j++) {
+                    if (isset($items[$j + $offset])) {
+                        $page[$j + $offset] = $items[$j + $offset];
+                    }
+                }
+                $pages[$i] = $page;
+            }
+            echo json_encode(['countPages' => $countPages, 'pages' => $pages]);;
         } else {
             echo json_encode(['error' => 'Кількість записів на сторінці не задано']);
         }
@@ -179,6 +196,12 @@ if ($method === 'PATCH') {
             $newLogo = $data['newLogoName'];
             $res = $art->setNewLogo($oldLogo, $newLogo);
             echo json_encode(['res' => $res]);
+        }
+        if ($headers['status'] === 'set-like') {
+            if (isset($_GET['id']) and isset($_GET['uid'])) {
+                $res = $art->setLike($_GET['id'], $_GET['uid']);
+                echo json_encode($res);
+            }
         }
     }
 }

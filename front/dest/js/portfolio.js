@@ -1,19 +1,14 @@
-// Перевірка користувача
-window.onload = function () {
-  let userField = document.getElementById('login');
-  const userToken = sessionStorage.getItem('user_token') || localStorage.getItem('user_token') || 0;
-  if (userToken !== 0) {
-    getUser(link, userToken, userField);
-    getImage(1);
-  }
-  else {
-    userField.innerHTML = 'Увійти';
-  }
-}
-
-
+const userToken = sessionStorage.getItem('user_token') || localStorage.getItem('user_token') || 0;
+const userImageLink = 'http://artist-blog.ua/backend/UserImages/';
 const portfolioLink = 'http://artist-blog.ua/backend/arts';
+const userLink = 'http://artist-blog.ua/backend/users';
 let data;
+let user;
+async function getUser(token) {
+  let newlink = userLink + '?token=' + token;
+  let response = await fetch(newlink);
+  return await response.json();
+}
 
 const urlParams = new URLSearchParams(window.location.search);
 let myParam = urlParams.get('page') || 1;
@@ -22,16 +17,17 @@ let itemsCount = ItemsInPage * (myParam - 1);
 let offset = itemsCount + ItemsInPage;
 
 let pageCount;
-let itemCount;
+let pages;
 
-loadData();
+loadData(1);
 
 
-async function loadData() {
+async function loadData(page) {
   await getCountPages(ItemsInPage);
-  await loadImages(itemsCount, offset);
+  await loadImages(page);
   addPopups();
-
+  user = await getUser(userToken);
+  console.log(user);
   displayPagination();
 }
 
@@ -45,8 +41,8 @@ async function getCountPages(items) {
     }
   });
   const responseData = await response.json();
-  pageCount = responseData.pages;
-  itemCount = responseData.items;
+  pageCount = responseData.countPages;
+  pages = responseData.pages;
 }
 
 async function displayPagination() {
@@ -62,7 +58,7 @@ async function displayPagination() {
     myParam = 1;
     itemsCount = ItemsInPage * (myParam - 1);
     offset = itemsCount + ItemsInPage;
-    loadData();
+    loadData(1);
     window.scrollTo(0, 0)
   });
 
@@ -75,7 +71,7 @@ async function displayPagination() {
       myParam = paginationItem.innerText;
       itemsCount = ItemsInPage * (myParam - 1);
       offset = itemsCount + ItemsInPage;
-      loadData();
+      loadData(i + 1);
       window.scrollTo(0, 0);
     });
   }
@@ -89,7 +85,7 @@ async function displayPagination() {
     myParam = pageCount;
     itemsCount = ItemsInPage * (myParam - 1);
     offset = itemsCount + ItemsInPage;
-    loadData();
+    loadData(pageCount);
     window.scrollTo(0, 0)
   });
 }
@@ -116,7 +112,7 @@ function createElement(id, portfolioItems) {
   `;
 }
 
-async function addImageInfo(item) {
+async function addImageInfo(item, id) {
   let newLink = portfolioLink + '?item=' + item;
   let response = await fetch(newLink, {
     method: 'GET',
@@ -127,8 +123,8 @@ async function addImageInfo(item) {
   });
   if (response.ok) {
     let data = await response.json();
-    const imageItem = document.getElementById('desc' + (item + 1));
-    const imageItemID = document.getElementById('itemID' + (item + 1));
+    const imageItem = document.getElementById('desc' + (id + 1));
+    const imageItemID = document.getElementById('itemID' + (id + 1));
     imageItem.innerText = data['name'];
     imageItemID.innerText = data['id'];
     if (data['res'] != undefined) {
@@ -140,51 +136,29 @@ async function addImageInfo(item) {
   return false;
 
 }
-async function loadImages(count, offset) {
+async function loadImages(page) {
 
   const portfolioItems = document.querySelector('.portfolio__items');
   portfolioItems.innerHTML = '';
-  for (let i = count; i < offset; i++) {
-    if (i >= itemCount) {
-      break;
-    }
+  for (const i in pages[page]) {
     createElement(i, portfolioItems);
-    let data = await addImageInfo(i);
-
+    let data = await addImageInfo(pages[page][i].id, i);
     if (data['res'] != undefined) {
-      console.log('bad reques');
-      await addImage(i, false);
+      await addImage(i, data.portfolio_logo, false);
     } else {
-      await addImage(i)
+      await addImage(i, data.portfolio_logo);
     }
-
   }
 }
-async function addImage(item, data = true) {
+async function addImage(item, link, data = true) {
   if (!data) {
     const imageItem = document.getElementById(item + 1);
     imageItem.src = '../dest/images/default-background.webp';
   }
   else {
-
-
-    let newLink = portfolioLink + '?item=' + item;
-    let response = await fetch(newLink, {
-      method: 'GET',
-      headers: {
-        "Content-type": "application/json;",
-        "status": "get-image"
-      },
-    });
-    if (response.ok) {
-      let data = await response.blob()
-      let url = URL.createObjectURL(data);
-      const imageItem = document.getElementById(item + 1);
-      imageItem.src = url;
-    }
-    else {
-      console.log('bad');
-    }
+    const logoLink = 'http://artist-blog.ua/backend/portfolio/logo/' + link;
+    const imageItem = document.getElementById(item + 1);
+    imageItem.src = logoLink;
   }
 }
 /////////////////////////////////////////////////////////////////
@@ -290,11 +264,26 @@ async function popupSetInforamation(currentPopup, itemID) {
   <div class="popup__body">
     <a href="##" class="popup__area"></a>
     <div class="popup__content">
+    <div class="popup__portfolio">
       <a href="##" class="popup__close close-popup">&times;</a>
       <div class="popup__title"></div>
       <img class="popup__image" src="" alt="main-img">
       <div class="popup__text"></div>
     </div>
+    <h3 class="popup__title user-title">Автор</h3>
+    <div class="popup__user">
+      <div class="user__image">
+        <img class="user-img" src="../dest/images/default-background.webp" alt="user-image"/>
+      </div>
+      <span class="user-field user-name"></span>
+      <span class="user-field user-email"></span>
+    </div>
+    <div class="likes">
+      <span class="like-count"></span>
+      <button class="like-button"><img class="like-img" src="../dest/images/like.png"/></button>
+    </div>
+  </div>
+
   </div>
   `;
   setPopupInfo(popupInfo, currentPopup);
@@ -306,7 +295,7 @@ async function popupSetInforamation(currentPopup, itemID) {
     logoImg.src = URL.createObjectURL(popupLogo);
   }
   await logoImg.decode();
-  const popupContent = document.querySelector('.popup__content');
+  const popupContent = document.querySelector('.popup__portfolio');
   const popupImage = document.querySelector('.popup__image');
   popupImage.src = logoImg.src;
   formattedImages(popupContent, popupImage);
@@ -321,6 +310,33 @@ async function popupSetInforamation(currentPopup, itemID) {
     let popupImageItem = document.getElementById('image' + (index + 1));
     formattedImages(popupContent, popupImageItem);
   }
+
+  if (popupInfo.user.user_image != 'empty') {
+    const userImage = document.querySelector('.user-img');
+    userImage.src = userImageLink + popupInfo.user.user_image;
+  }
+  const userName = document.querySelector('.user-name');
+  userName.textContent = popupInfo.user.login;
+  const userEmail = document.querySelector('.user-email');
+  userEmail.textContent = popupInfo.user.email;
+
+  const likes = document.querySelector('.like-count');
+  likes.textContent = popupInfo.likes;
+  const likeButton = document.querySelector('.like-button');
+  likeButton.addEventListener('click', async e => {
+    e.preventDefault();
+    if (user.id !== undefined) {
+      let newLink = portfolioLink + '?id=' + popupInfo.id + '&uid=' + user.id;
+      let response = await fetch(newLink, {
+        method: 'PATCH',
+        headers: {
+          'status': 'set-like'
+        }
+      })
+      response = await response.json();
+      likes.textContent = response.likes;
+    }
+  });
 }
 
 async function getInfoForPopup(itemID) {
@@ -385,7 +401,7 @@ function formattedImages(popupContent, popupItem) {
     popupItem.style.width = (containerWidth - 200) + 'px';
   }
   else {
-    popupItem.style.width = containerWidth + 'px';
+    popupItem.style.width = (containerWidth + 1) + 'px';
   }
 }
 

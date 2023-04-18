@@ -22,6 +22,12 @@ class Art
         return $res;
     }
 
+    public function getVisiblePages()
+    {
+        $res = $this->db->getFieldFromTable($this->tableName, 'id', 'hide', 0);
+        return $res;
+    }
+
     public function getArtByOffset($offset): array
     {
         $res = $this->db->getPortfolioElement($offset);
@@ -52,6 +58,8 @@ class Art
     public function getArtByID($id): array
     {
         $res = $this->db->getFromTable($this->tableName, 'id', $id);
+        $likes = $this->db->getCountElementsWithParam('likes_for_portfolio', 'id', 'portfolio_id', $res['id']);
+        $res['likes'] = $likes[0]['count'];
         if (isset($res['error'])) {
             return $res;
         }
@@ -60,7 +68,7 @@ class Art
 
     public function getCountImages($id)
     {
-        $res = $this->db->getCountElementsWithParam('images_for_portfolio', 'portfolio_id', $id);
+        $res = $this->db->getCountElementsWithParam('images_for_portfolio', 'id', 'portfolio_id', $id);
         return $res[0]['count'];
     }
 
@@ -101,6 +109,20 @@ class Art
                 'status' => false,
                 'message' => $imageSave['error']
             ];
+        }
+    }
+
+    public function setLike($portfolioID, $userID)
+    {
+        $res = [];
+        if (empty($this->db->checkLike($portfolioID, $userID))) {
+            $res = $this->db->insertLike($portfolioID, $userID);
+        } else {
+            $res = $this->db->removeLike($userID);
+        }
+        if ($res['ok']) {
+            $likes = $this->db->getCountElementsWithParam('likes_for_portfolio', 'id', 'portfolio_id', $portfolioID);
+            return ['likes' => $likes[0]['count']];
         }
     }
 
