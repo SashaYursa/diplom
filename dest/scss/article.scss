@@ -1,0 +1,17 @@
+@import 'import.scss';
+//=============header============
+@import '_header.scss';
+//=============header============
+body{
+  display: flex;
+  flex-direction: column;
+}
+
+.main{
+  flex: 1 1 auto;
+}
+//========main===========
+//========main end========
+//========footer==========
+@import '_footer.scss';
+//========footer end======

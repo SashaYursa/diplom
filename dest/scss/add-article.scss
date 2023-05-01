@@ -1,0 +1,82 @@
+@import "import.scss";
+
+.add-article {
+  margin-top: 10px;
+}
+.container {
+}
+.tox{
+  width: 90%;
+  margin-top: 50px;
+
+}
+.tox-tinymce{
+  min-height: 70vh;
+}
+.add-article__body{
+  margin: 0 auto;
+  align-self: center;
+  width: 95%;
+  padding: 20px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #fff;
+}
+.article__header{
+  width: 88%;
+  margin: 0 auto;
+  font-size: 32px;
+  padding: 10px;
+  font-family: Lora;
+  border: none;
+  word-wrap: break-word;
+  &.error::placeholder{
+    color: red;
+  }
+
+}
+.add-article__area {
+}
+.buttons{
+  display: flex;
+  width: 70%;
+  justify-content: space-between;
+  align-self: center;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+.add-btn {
+  margin-top: 30px;
+  width: 50%;
+  width: 100%;
+    display: block;
+    padding: 9px;
+    color: #090909;
+    border-radius: 20px;
+    font-weight: 700;
+    font-size: 14px;
+    border: none;
+    cursor: pointer;
+    background: none;
+    background-color: rgba(25,25,25,.1803921569);
+    transition: all .3s ease 0s;
+    text-decoration: none;
+    &:hover{
+      background-color: #000000;
+      color: #fff;
+    }
+}
+.error-field{
+  align-items: center;
+  margin: 20px 5px 10px;
+
+}
+.error{
+  font-size: 18px;
+  color: red;
+}
+.save-button {
+}
+.back-button {
+}

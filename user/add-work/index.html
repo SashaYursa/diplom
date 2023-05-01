@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="uk">
+
+  <head>
+    <title>Додання роботи</title>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="../dest/images/favico.png" rel="icon">
+
+    <meta name="keywords" content="...">
+    <meta name="description" content="desc">
+    <meta name="author" content="YurSa">
+    <meta name="copyright" content="YurSa">
+    <meta name="adress" content="Uzhorod Ukraine">
+
+    <meta property="og:title" content="title">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="">
+    <meta property="og:image" content="">
+    <meta property="og:description" content="desc">
+
+    <link href="../../dest/mincss/reset.min.css" rel="stylesheet">
+    <link href="../../dest/mincss/add-portfolio-item.min.css" rel="stylesheet">
+  </head>
+
+  <body class="body">
+    <main class="main">
+
+      <div class="container">
+        <form class="work__form" enctype="multipart/form-data">
+          <input class="work__name work-input" id="work-name" name="work-name" type="text" placeholder="Назва роботи">
+          <textarea class="work__description work-input" id="work-description" name="work-description"
+            placeholder="Опис роботи"></textarea>
+          <label class="work__lable" for="logo">Картинки</label>
+
+          <input class="file__button" id="logo" type="file" hidden>
+          <div class="work__image" id="dropZone">
+            Для завантаження натисніть, або перетягніть файл сюди
+          </div>
+          <div class="image__field">
+          </div>
+          <div class="work__image-errors">
+            <ul class="work__image-error">
+            </ul>
+          </div>
+          <div class="action-buttons">
+            <input class="work__submit work-button" type="submit" value="Надіслати">
+            <a href="user/" class="back-link"><button class="back-button action-button">Назад</button></a>
+          </div>
+
+        </form>
+      </div>
+    </main>
+    <script type="module" src="../../dest/js/portfolioCreate.js"></script>
+  </body>
+
+</html>

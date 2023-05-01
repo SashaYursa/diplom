@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="uk">
+
+  <head>
+    <title>Редагування поста</title>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="../dest/images/favico.png" rel="icon">
+
+    <meta name="keywords" content="...">
+    <meta name="description" content="desc">
+    <meta name="author" content="YurSa">
+    <meta name="copyright" content="YurSa">
+    <meta name="adress" content="Uzhorod Ukraine">
+
+    <meta property="og:title" content="title">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="">
+    <meta property="og:image" content="">
+    <meta property="og:description" content="desc">
+
+    <link href="../../dest/mincss/reset.min.css" rel="stylesheet">
+    <link href="../../dest/mincss/add-article.min.css" rel="stylesheet">
+  </head>
+
+  <body>
+    <section class="add-article">
+      <div class="container">
+        <div class="add-article__body">
+          <input name="article-header" class="article__header" type="text" placeholder="Заголовок">
+          <textarea class="add-article__area" id="add-area">
+          Пост
+        </textarea>
+          <div class="error-field">
+            <p class="error"></p>
+          </div>
+          <div class="buttons">
+            <button class="add-btn save-button">Зберегти</button>
+            <button class="add-btn back-button">Назад</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </body>
+  <script src="https://cdn.tiny.cloud/1/z7rcyy16jlatuscstv8telttc0pcmgputzfx4l79bu6lqyq6/tinymce/6/tinymce.min.js"
+    referrerpolicy="origin">
+    </script>
+  <script type="module" src="../../dest/js/editArticle.js"></script>
+
+</html>

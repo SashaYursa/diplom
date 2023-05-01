@@ -1,0 +1,233 @@
+@import 'import.scss';
+//=============header============
+@import '_header.scss';
+//=============header============
+
+//========main===========
+body{
+  display: flex;
+  flex-direction: column;
+}
+
+main{
+  flex: 1 1 auto;
+}
+
+.articles {
+  margin: 0 10px 60px;
+}
+.container {
+}
+.articles__header{
+  margin: 40px 0 40px;
+  text-align: center;
+  font-size: 46px;
+  padding-bottom: 30px;
+  background-image: url(//cdn.shopify.com/s/files/1/0056/7679/3890/t/15/assets/dotted-line.png?v=2618969…);
+  background-size: 150px 5px;
+  background-position: 50.5% bottom;
+  background-repeat: no-repeat;
+}
+
+.articles__list {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+.articles__item {
+  display: flex;
+  gap: 20px;
+  height: 300px;
+  overflow: hidden;
+  border: 1px solid #eaeaea;
+  background-color: #fff;
+  border-radius: 6px;
+}
+.article__image {
+  width: 25%;
+  overflow: hidden;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+}
+.article__image img{
+  object-fit: cover;
+  height: 100%;
+  width: 100%;
+}
+.article__content {
+  display: flex;
+  flex-direction: column;
+  font-family: 'Lora';
+  width: 70%;
+}
+.article__author {
+  display: flex;
+  align-items: center;
+  margin-top: 15px;
+  gap: 10px;
+}
+.article__author-image{
+  height: 50px;
+  width: 50px;
+  overflow: hidden;
+}
+.article__author-image img {
+  border-radius: 50%;
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+}
+.article__author-content {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.article__author-name {
+  font-size: 16px;
+  font-weight: 700;
+}
+.article__date {
+  display: flex;
+  gap: 20px;
+}
+.article__date-published {
+  font-size: 14px;
+}
+.article__time-from-published {
+  font-size: 14px;
+}
+.article__description {
+  max-height: 60%;
+  margin: 8px 10px 0 0;
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  color: #000;
+  text-decoration: none;
+  text-align: justify;
+}
+.article__description-header {
+  font-size: 34px;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-height: 25%;
+}
+.article__description-content {
+  font-size: 20px;
+  min-height: 65%;
+  overflow: hidden;
+}
+.article__stats {
+  display: flex;
+  width: 100%;
+  gap: 20px;
+  font-size: 14px;
+  margin-bottom: 10px;
+  align-items: center;
+  margin-top: 10px;
+}
+.article__stats-views {
+  font-size: 14px;
+}
+.article__coment-link{
+  text-decoration: none;
+  color: #000;
+}
+.article__coment-link:hover{
+  color: #2b36af;
+}
+.article__stats-comments {
+  font-size: 14px;
+}
+.article__stats-like-field {
+  flex: 1 1 auto;
+  display: flex;
+  align-items: center;
+  justify-content: end;
+}
+.article__like-button{
+  background:none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+.article__like-button:hover{
+  opacity: .3;
+}
+.article__stats-like-field img {
+  height: 30px;
+}
+.article__stats-likes {
+  font-size: 16px;
+}
+
+@media (max-width: 975px) {
+  .article__image{
+    height: 300px;
+    overflow: hidden;
+    width: 100%;
+  }
+  .articles__item{
+    flex-direction: column;
+    align-items: center;
+    width: 95%;
+    height: auto;
+    align-self: center;
+  }
+  .article__content{
+    width: 98%;
+  }
+  .article__content:nth-child(1){
+    order: 2;
+
+  }
+  .article__content:nth-child(2){
+    order: 1;
+  }
+  .article__content:nth-child(3){
+    order: 3;
+  }
+  .article__author{
+    margin: 0;
+    order: 1;
+    margin: 0;
+    align-self: center;
+    margin-bottom: 10px;
+  }
+
+  .article__stats{
+    display: flex;
+    width: 100%;
+    gap: 20px;
+    font-size: 14px;
+    margin-bottom: 10px;
+    align-items: center;
+    margin-top: 10px;
+    width: 85%;
+    align-items: center;
+    justify-content: center;
+    margin: 10px auto;
+  }
+  .article__description{
+    margin: 0;
+    padding: 0 5px;
+  }
+  .article__description-header{
+    font-size: 26px;
+    padding-bottom: 3px;
+  }
+  .article__description-content{
+    font-size: 18px;
+    padding-bottom: 3px
+  }
+
+}
+
+//========main end========
+//========footer==========
+@import '_footer.scss';
+//========footer end======

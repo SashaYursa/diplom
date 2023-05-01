@@ -1,0 +1,121 @@
+@import 'import.scss';
+
+@import '_header.scss';
+//=============header============
+
+//========main===========
+body{
+  display: flex;
+  flex-direction: column;
+}
+
+main{
+  flex: 1 1 auto;
+}
+.block-header {
+  margin: 40px 0 40px;
+  text-align: center;
+  font-size: 36px;
+  padding-bottom: 30px;
+  background-image: url(//cdn.shopify.com/s/files/1/0056/7679/3890/t/15/assets/dotted-line.png?v=2618969…);
+  background-size: 150px 5px;
+  background-position: 50.5% bottom;
+  background-repeat: no-repeat;
+
+
+}
+.information__block {
+  display: flex;
+  margin-bottom: 80px;
+}
+.image-wrapper {
+  width: 50%;
+}
+.image-wrapper img {
+  padding: 0 10px;
+  width: 100%;
+}
+.caption-wrapper {
+  width: 50%;
+  padding-left: 50px;
+  padding-right: 10px;
+  display: flex;
+  align-items: center;
+
+}
+.caption {
+  text-align: justify;
+  font-size: 20px;
+  line-height: 25px;
+  letter-spacing: 0.5px;
+  margin-bottom: 25px;
+  padding-bottom: 30px;
+  background-image: url(//cdn.shopify.com/s/files/1/0056/7679/3890/t/15/assets/dotted-line.png?v=2618969…);
+  background-size: 107px 3px;
+  background-position: left bottom;
+  background-repeat: repeat-x;
+}
+
+.clients__block {
+  margin-bottom: 60px;
+}
+.clients__items {
+  display: flex;
+  justify-content: space-around;
+  gap: 10px;
+
+}
+.clients__item {
+  min-height: 500px;
+  display: flex;
+  flex-direction: column;
+  background-color: #fff;
+  align-self: center;
+  justify-content: start;
+  width: 30%;
+  border-radius: 10px;
+  border: 1px solid hsl(210deg 18% 87% / 100%);
+  overflow: hidden;
+}
+.client__img {
+  height: 10%;
+  overflow: hidden;
+}
+.client__img img {
+  object-fit: cover;
+  height: 300px;
+  width: 100%
+}
+.client__info{
+  display: flex;
+  flex-direction: column;
+  padding: 15px;
+  flex: auto;
+}
+.client__title {
+  font-size: 20px;
+  margin-bottom: 10px;
+  font-weight: 700;
+  flex: 1 1 auto;
+}
+.client__description {
+  font-size: 16px;
+  margin-bottom: 20px;
+  flex: 1 1 auto;
+  >p{
+    text-align: justify;
+  }
+}
+.client__link {
+  text-decoration: none;
+  font-size: 16px;
+  color: #000;
+  font-size: 30px;
+}
+
+
+//========main end========
+
+//=========footer==============
+@import '_footer.scss';
+//=========footer end =========
